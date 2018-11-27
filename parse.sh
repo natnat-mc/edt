@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# constants and functions
+fmtdate() {
+	echo "`echo $1 | cut -c 1-4`/`echo $1 | cut -c 5-6`/`echo $1 | cut -c 7-8` `echo $1 | cut -c 10-11`:`echo $1 | cut -c 12-13` UTC"
+}
+dateoutfmt="%Y/%m/%d %H:%M:%S"
+
 cd "$installdir"
 
 ./get.sh
@@ -51,7 +57,7 @@ if [ -n "$redo" ]; then
 				;;
 			LOCATION)
 				# set location
-				location="$fragment"
+				room="$fragment"
 				;;
 			SUMMARY)
 				# set class
@@ -59,13 +65,13 @@ if [ -n "$redo" ]; then
 				;;
 			DTSTART)
 				# set start time
-				dt="`echo $fragment | cut -c 1-4`/`echo $fragment | cut -c 5-6`/`echo $fragment | cut -c 7-8` `echo $fragment | cut -c 10-11`:`echo $fragment | cut -c 12-13` UTC"
-				stime="`date -d $dt`"
+				dt="`fmtdate "$fragment"`"
+				stime="`date -d $dt +"$dateoutfmt"`"
 				;;
 			DTEND)
 				# set end time
-				dt="`echo $fragment | cut -c 1-4`/`echo $fragment | cut -c 5-6`/`echo $fragment | cut -c 7-8` `echo $fragment | cut -c 10-11`:`echo $fragment | cut -c 12-13` UTC"
-				etime="`date -d $dt`"
+				dt="`fmtdate "$fragment"`"
+				etime="`date -d $dt +"$dateoutfmt"`"
 				;;
 			END)
 				# append the event to the list
