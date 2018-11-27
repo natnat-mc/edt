@@ -24,14 +24,14 @@ elif [ data/parsed -ot data/cal.ics ]; then
 	fi
 fi
 
-# nuke anything we could have had
-rm -f data/parsed
-touch data/parsed
-rm -f data/sha1
-sha1sum data/cal.ics > data/sha1
-
 if [ -n "$redo" ]; then
 	echo "Parsing calendar..."
+	
+	# nuke anything we could have had
+	rm -f data/parsed
+	touch data/parsed
+	rm -f data/sha1
+	sha1sum data/cal.ics > data/sha1
 	
 	# init
 	class=''
@@ -84,6 +84,8 @@ if [ -n "$redo" ]; then
 				;;
 		esac
 	done
+	sort data/parsed > data/tmp
+	mv data/tmp data/parsed
 else
 	echo "This version of the calendar doesn't have to be parsed"
 fi
