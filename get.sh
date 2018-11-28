@@ -14,7 +14,12 @@ fi
 if [ -n "$dl" ]; then
 	# download the calendar
 	echo "Downloading calendar..."
-	curl `cat data/url` | egrep -v "^LAST-MODIFIED:" | egrep -v "^SEQUENCE:" | egrep -v "^DTSTAMP:" > data/cal.ics
+	if curl `cat data/url` > data/cal.tmp; then
+		cat data/cal.tmp | egrep -v "^LAST-MODIFIED:" | egrep -v "^SEQUENCE:" | egrep -v "^DTSTAMP:" > data/cal.ics
+	else
+		echo "Failed to download the calendar, reusing old version for now"
+	fi
+	rm data/cal.tmp
 else
 	echo "The calendar is already up to date"
 fi
